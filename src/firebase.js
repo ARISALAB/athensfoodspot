@@ -1,24 +1,29 @@
 
-rules_version = '2';
+import { initializeApp, getApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-service cloud.firestore {
-  match /databases/{database}/documents {
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+};
 
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email == "aris.alampourinos@gmail.com";
-    }
+export const configured = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId &&
+  firebaseConfig.appId
+);
 
-    match /restaurants/{restaurantId} {
+const app = configured
+  ? getApps().length > 0
+    ? getApp()
+    : initializeApp(firebaseConfig)
+  : null;
 
-      // Οι επισκέπτες βλέπουν μόνο δημοσιευμένα εστιατόρια.
-      // Ο διαχειριστής μπορεί να διαβάζει όλες τις καταχωρίσεις.
-      allow read: if isAdmin()
-        || resource.data.status == "published";
-
-      // Μόνο ο συγκεκριμένος συνδεδεμένος διαχειριστής
-      // μπορεί να δημιουργεί, να τροποποιεί ή να διαγράφει.
-      allow create, update, delete: if isAdmin();
-    }
-  }
-}
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
