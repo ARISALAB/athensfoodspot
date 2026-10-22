@@ -177,11 +177,26 @@ function Admin() {
   }, []);
 
   async function refresh() {
-    const all = await loadRestaurants();
+  try {
+    const all = await loadAdminRestaurants();
     setItems(all);
-  }
-  useEffect(() => { refresh(); }, []);
+    setError("");
+  } catch (err) {
+    console.error("Admin restaurant list failed to load.", err);
 
+    setError(
+      "Δεν ήταν δυνατή η φόρτωση των καταχωρίσεων. " +
+      "Έλεγξε τη σύνδεση και τους κανόνες πρόσβασης του Firebase."
+    );
+  }
+}
+useEffect(() => {
+  if (user) {
+    refresh();
+  } else {
+    setItems([]);
+  }
+}, [user]);
   async function login(e) {
     e.preventDefault(); setError("");
     try { await signInWithEmailAndPassword(auth, email, password); }
