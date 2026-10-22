@@ -119,7 +119,24 @@ export async function loadRestaurants() {
     return demoRestaurants;
   }
 }
+export async function loadAdminRestaurants() {
+  if (!configured) {
+    throw new Error("Το Firebase δεν έχει ρυθμιστεί.");
+  }
 
+  const q = query(
+    collection(db, "restaurants"),
+    orderBy("name", "asc"),
+    limit(500)
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map((item) => ({
+    id: item.id,
+    ...item.data()
+  }));
+}
 export async function saveRestaurant(restaurant) {
   if (!configured) throw new Error("Συμπλήρωσε πρώτα τη ρύθμιση Firebase.");
   const id = restaurant.id || crypto.randomUUID();
