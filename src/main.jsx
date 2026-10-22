@@ -239,4 +239,3 @@ function App() {
   return <BrowserRouter><Header/><Routes><Route path="/" element={<Home/>}/><Route path="/restaurant/:slug" element={<RestaurantDetail restaurants={restaurants}/>}/><Route path="/admin" element={<Admin/>}/><Route path="*" element={<main className="container detail-not-found"><h1>Η σελίδα δεν βρέθηκε</h1><Link className="button-primary" to="/">Αρχική</Link></main>}/></Routes><Footer/></BrowserRouter>;
 }
 
-createRoot(document.getElementById("root")).render(<React.StrictMode><App/></React.StrictMode>);
