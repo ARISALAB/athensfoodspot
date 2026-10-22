@@ -1010,7 +1010,12 @@ function Admin() {
         )}
 
         {error && <div className="form-error">{error}</div>}
-
+{allowed && (
+  <OsmBulkImport
+    existingRestaurants={items}
+    onImported={refresh}
+  />
+)}
         <div className="admin-columns">
           <form
             className="admin-card editor-card"
