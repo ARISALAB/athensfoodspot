@@ -4,8 +4,13 @@ import { BrowserRouter, Link, Route, Routes, useNavigate, useParams } from "reac
 import { Search, MapPin, Utensils, ArrowRight, Menu, X, ChevronDown, SlidersHorizontal, ExternalLink, Phone, Globe, ShieldCheck, Plus, Pencil, Trash2, LogIn, LogOut, LayoutDashboard, CheckCircle2, AlertCircle } from "lucide-react";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, configured } from "./firebase";
-import { demoRestaurants, loadRestaurants, saveRestaurant, removeRestaurant } from "./data";
-import "./styles.css";
+import {
+  demoRestaurants,
+  loadRestaurants,
+  loadAdminRestaurants,
+  saveRestaurant,
+  removeRestaurant
+} from "./data";import "./styles.css";
 
 const categories = [
   { name: "Όλα", icon: "✦" },
