@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Public users can read only published listings.
+    match /restaurants/{restaurantId} {
+      allow read: if resource.data.status == "published";
+      // Admin writes require Firebase Authentication and a custom admin claim.
+      // Set the claim using a trusted Admin SDK environment, never from the browser.
+      allow create, update, delete: if isSignedIn()
+        && request.auth.token.admin == true;
+    }
+  }
+}
